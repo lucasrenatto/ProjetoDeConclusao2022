@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignFirstApproachCrud", "DesignFirstApproachCrud\DesignFirstApproachCrud.csproj", "{D8C88105-2B6D-403C-AA1E-0384D6E69C79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC", "DesignFirstApproachCrud\TCC.csproj", "{D8C88105-2B6D-403C-AA1E-0384D6E69C79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCC.Repository", "TCC.Repository\TCC.Repository.csproj", "{18CD8370-9874-4985-BC7D-65761958E58E}"
 EndProject
