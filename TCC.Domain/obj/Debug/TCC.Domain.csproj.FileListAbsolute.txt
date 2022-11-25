@@ -1,0 +1,6 @@
+C:\Users\lucas\Área de Trabalho\Desktop\arquivos\Projetos\DesignFirstApproachCrud\TCC.Domain\bin\Debug\TCC.Domain.dll
+C:\Users\lucas\Área de Trabalho\Desktop\arquivos\Projetos\DesignFirstApproachCrud\TCC.Domain\bin\Debug\TCC.Domain.pdb
+C:\Users\lucas\Área de Trabalho\Desktop\arquivos\Projetos\DesignFirstApproachCrud\TCC.Domain\obj\Debug\TCC.Domain.csproj.AssemblyReference.cache
+C:\Users\lucas\Área de Trabalho\Desktop\arquivos\Projetos\DesignFirstApproachCrud\TCC.Domain\obj\Debug\TCC.Domain.csproj.CoreCompileInputs.cache
+C:\Users\lucas\Área de Trabalho\Desktop\arquivos\Projetos\DesignFirstApproachCrud\TCC.Domain\obj\Debug\TCC.Domain.dll
+C:\Users\lucas\Área de Trabalho\Desktop\arquivos\Projetos\DesignFirstApproachCrud\TCC.Domain\obj\Debug\TCC.Domain.pdb

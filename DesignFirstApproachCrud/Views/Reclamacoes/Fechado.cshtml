@@ -1,0 +1,71 @@
+﻿@{
+    var reclamacoes = (List<TCC.Domain.DTO.ReclamacaoDTO>)ViewBag.reclamacoes;
+    var cor = "";
+}
+<link rel="stylesheet" href="~/Theme/css/Index.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+<h3 style="font-size:34px" class="text-dark">Reclamações Concluídas</h3>
+
+<div class="card mt-2">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Local</th>
+                <th>Data/Hora</th>
+                <th>Área</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in reclamacoes)
+            {
+                if (item.Area.Descricao.Equals("CFPL"))
+                {
+                    cor = "badge bg-primary";
+                }
+                else if (item.Area.Descricao.Equals("SAE"))
+                {
+                    cor = "badge bg-danger";
+                }
+                else if (item.Area.Descricao.Equals("Saúde"))
+                {
+                    cor = "badge bg-success";
+                }
+                else
+                {
+                    cor = "badge bg-info text-light";
+                }
+
+                <tr>
+                    <td>@item.NomeUsuario</td>
+                    <td>@item.Rua</td>
+                    <td>@item.DataHora</td>
+                    <td><span class="@cor">@item.Area.Descricao</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    var test = "";
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            },
+        });
+
+    });
+
+  
+
+
+</script>
+
+

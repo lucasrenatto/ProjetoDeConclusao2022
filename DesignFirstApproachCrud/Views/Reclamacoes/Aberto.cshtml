@@ -1,0 +1,122 @@
+﻿@{
+    var reclamacoes = (List<TCC.Domain.DTO.ReclamacaoDTO>)ViewBag.reclamacoes;
+    var cor = "";
+}
+<link rel="stylesheet" href="~/Theme/css/Index.css">
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+<h3 style="font-size:34px" class="text-dark">Reclamações em Aberto</h3>
+
+<div class="card mt-2">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Local</th>
+                <th>Data/Hora</th>
+                <th>Área</th>
+                <th>Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in reclamacoes)
+            {
+                if (item.Area.Descricao.Equals("CFPL"))
+                {
+                    cor = "badge bg-primary";
+                }
+                else if (item.Area.Descricao.Equals("SAE"))
+                {
+                    cor = "badge bg-danger";
+                }
+                else if (item.Area.Descricao.Equals("Saúde"))
+                {
+                    cor = "badge bg-success";
+                }
+                else
+                {
+                    cor = "badge bg-info text-light";
+                }
+
+                <tr>
+                    <td>@item.NomeUsuario</td>
+                    <td>@item.Rua</td>
+                    <td>@item.DataHora</td>
+                    <td><span class="@cor">@item.Area.Descricao</span></td>
+                    <td><a class="fas fa-eye" style="text-decoration:none" onclick="verDados()"></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ver Reclamação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="row">
+                    <div class="col-4">
+                        <label for="exampleInputEmail1" class="form-label">Usuário</label>
+                        <input type="text" disabled class="form-control" id="usuario" aria-describedby="emailHelp">
+                    </div>
+                    <div class="col-8">
+                        <label for="exampleInputEmail1" class="form-label">Endereço</label>
+                        <input type="text" disabled class="form-control" id="endereco" aria-describedby="emailHelp">
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center mt-3">
+                    <div class="col-4">
+                        <label for="exampleInputEmail1" class="form-label">Data/Hora</label>
+                        <input type="text" disabled class="form-control" id="dataHora" aria-describedby="emailHelp">
+                    </div>
+                    <div class="col-4">
+                        <label for="exampleInputEmail1" class="form-label">Àrea</label>
+                        <input type="text" disabled class="form-control" id="area" aria-describedby="emailHelp">
+                    </div>
+                </div>
+                <row>
+                    <div class="col-12 mt-3">
+                        <label for="exampleInputEmail1" class="form-label">Descrição</label>
+                        <textarea disabled class="form-control" id="descricao" aria-describedby="emailHelp"></textarea>
+                    </div>
+                </row>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Finalizar Reclamação</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var test = "";
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            },
+        });
+
+    });
+
+    function verDados() {
+        $("#modalExemplo").modal({
+            show: true
+        });
+    }
+
+
+</script>
+
+

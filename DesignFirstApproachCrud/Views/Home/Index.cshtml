@@ -1,0 +1,108 @@
+﻿@{
+    var reclamacoes = (List<TCC.Domain.DTO.ReclamacaoDTO>)ViewBag.reclamacoes;
+    var reclamacaoSAE = (int)ViewBag.quantidadeSAE;
+    var quantidadeCFPL = (int)ViewBag.quantidadeCFPL;
+    var quantidadeSaude = (int)ViewBag.quantidadeSaude;
+    var quantidadeOutros = (int)ViewBag.quantidadeOutros;
+    var cor = "";
+}
+<link rel="stylesheet" href="~/Theme/css/Index.css">
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<!-- BS JavaScript -->
+<script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+<link href="~/Theme/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card-counter primary">
+                <i class="fa fa-hand-holding-water"></i>
+                <span class="count-name">SAE</span>
+                <span class="count-numbers">@reclamacaoSAE</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-counter danger">
+                <i class="fa fa-lightbulb-o"></i>
+                <span class="count-numbers">@quantidadeCFPL</span>
+                <span class="count-name">CFPL</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-counter success">
+                <i class="fa fa-ambulance"></i>
+                <span class="count-numbers">@quantidadeSaude</span>
+                <span class="count-name">Saúde</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card-counter info">
+                <i class="fa fa-hand-holding-water"></i>
+                <span class="count-numbers">@quantidadeOutros</span>
+                <span class="count-name">Outros</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <h4 class="text-center">Últimas Reclamações</h4>
+    <table id="example" style="width:100%">
+        <thead>
+            <tr>
+                <th>Usuário</th>
+                <th>Local</th>
+                <th>Data/Hora</th>
+                <th>Área</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in reclamacoes)
+            {
+                if (item.Area.Descricao.Equals("CFPL"))
+                {
+                    cor = "badge bg-primary";
+                }
+                else if (item.Area.Descricao.Equals("SAE"))
+                {
+                    cor = "badge bg-danger";
+                }
+                else if (item.Area.Descricao.Equals("Saúde"))
+                {
+                    cor = "badge bg-success";
+                }
+                else 
+                {
+                    cor = "badge bg-info text-light";
+                }
+
+
+                <tr>
+                    <td>@item.NomeUsuario</td>
+                    <td>@item.Rua</td>
+                    <td>@item.DataHora</td>
+                    <td><span class="@cor">@item.Area.Descricao</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
+            },
+            "dom": 'rtip',
+            "info": false
+        });
+
+    });
+</script>
