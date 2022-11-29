@@ -9,6 +9,7 @@ namespace TCC.Domain.DTO
         public string Rua { get; set; }
         public string Cidade { get; set; }
         public DateTime DataHora { get; set; }
+        public string DataString { get; set; }
         public string Estado { get; set; }
         public string NomeUsuario { get; set; }
         public bool Ativa { get; set; }

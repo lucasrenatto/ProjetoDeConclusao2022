@@ -129,6 +129,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReclamacoesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -2064,6 +2065,8 @@
     <Content Include="Theme\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
     <Content Include="Theme\vendor\jquery\jquery.min.map" />
     <Content Include="Theme\vendor\jquery\jquery.slim.min.map" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Dashboard\AbertoFechado.cshtml" />
     <None Include="Views\Reclamacoes\Aberto.cshtml" />
     <None Include="Views\Reclamacoes\Fechado.cshtml" />
   </ItemGroup>

@@ -104,7 +104,8 @@ namespace TCC.Service
                     Estado = reclamacao.Estado,
                     ID = reclamacao.ID,
                     NomeUsuario = reclamacao.NomeUsuario,
-                    Rua = reclamacao.Rua
+                    Rua = reclamacao.Rua,
+                    DataString = reclamacao.DataHora.ToString("dd/MM/yy HH:mm")
                 };
 
                 return rec;

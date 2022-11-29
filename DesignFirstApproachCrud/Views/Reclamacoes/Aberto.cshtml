@@ -3,6 +3,13 @@
     var cor = "";
 }
 <link rel="stylesheet" href="~/Theme/css/Index.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin="" />
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
 <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
@@ -10,47 +17,58 @@
 
 <h3 style="font-size:34px" class="text-dark">Reclamações em Aberto</h3>
 
+<style>
+    #map {
+        height: 150px;
+        width:450px
+    }
+</style>
 <div class="card mt-2">
-    <table id="example" class="table table-striped" style="width:100%">
-        <thead>
-            <tr>
-                <th>Usuário</th>
-                <th>Local</th>
-                <th>Data/Hora</th>
-                <th>Área</th>
-                <th>Ver</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in reclamacoes)
-            {
-                if (item.Area.Descricao.Equals("CFPL"))
-                {
-                    cor = "badge bg-primary";
-                }
-                else if (item.Area.Descricao.Equals("SAE"))
-                {
-                    cor = "badge bg-danger";
-                }
-                else if (item.Area.Descricao.Equals("Saúde"))
-                {
-                    cor = "badge bg-success";
-                }
-                else
-                {
-                    cor = "badge bg-info text-light";
-                }
-
+    <div class="card-header">
+        <button type="button" class="btn btn-primary" onclick="EnviarEmail()">Enviar Reclamações Por Email</button>
+    </div>
+    <div class="card-body">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
                 <tr>
-                    <td>@item.NomeUsuario</td>
-                    <td>@item.Rua</td>
-                    <td>@item.DataHora</td>
-                    <td><span class="@cor">@item.Area.Descricao</span></td>
-                    <td><a class="fas fa-eye" style="text-decoration:none" onclick="verDados()"></a></td>
+                    <th>Usuário</th>
+                    <th>Local</th>
+                    <th>Data/Hora</th>
+                    <th>Área</th>
+                    <th>Ver</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in reclamacoes)
+                {
+                    if (item.Area.Descricao.Equals("CFPL"))
+                    {
+                        cor = "badge bg-primary";
+                    }
+                    else if (item.Area.Descricao.Equals("SAE"))
+                    {
+                        cor = "badge bg-danger";
+                    }
+                    else if (item.Area.Descricao.Equals("Saúde"))
+                    {
+                        cor = "badge bg-success";
+                    }
+                    else
+                    {
+                        cor = "badge bg-info text-light";
+                    }
+
+                    <tr>
+                        <td>@item.NomeUsuario</td>
+                        <td>@item.Rua</td>
+                        <td>@item.DataHora</td>
+                        <td><span class="@cor">@item.Area.Descricao</span></td>
+                        <td><a class="fas fa-eye" style="text-decoration:none" onclick="verDados(@item.ID)"></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -63,6 +81,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div id="map" class="ms-4 mt-2"></div>
             <div class="modal-body text-center">
                 <div class="row">
                     <div class="col-4">
@@ -93,11 +112,73 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Finalizar Reclamação</button>
+                <button type="button" class="btn btn-primary" onclick="concluirReclamacao()">Finalizar Reclamação</button>
+                <input type="text" id="idReclamacao" hidden />
             </div>
         </div>
     </div>
 </div>
+<div class="alert"></div>
+
+
+
+<style>
+    .bt {
+        padding: 20px 40px;
+        font-size: 20px;
+        background-color: blue;
+        color: #fff;
+        border: none;
+        outline: none;
+        box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.5);
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    .message {
+        padding: 19px 60px;
+        position: fixed;
+        top: 20px;
+        right: 105px;
+        background-color: green;
+        border-radius: 3px;
+        color: #fff;
+        animation: slidein 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+
+    @@keyframes slidein {
+        0% {
+            transform: translateX(1000px);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .message::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 5px;
+        background-color: rgba(0, 0, 0, 0.5);
+        animation: time 3s forwards;
+    }
+
+    @@keyframes time {
+        0% {
+            width: 0;
+        }
+
+        100% {
+            width: 100%;
+        }
+    }
+</style>
 
 <script>
     var test = "";
@@ -107,14 +188,99 @@
                 "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/pt-BR.json"
             },
         });
-
+        var map = L.map('map').setView([-22.9831, -49.8569], 30);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+        }).addTo(map);
+;
+       
+        var locations = [
+            ["LOCATION_1", -22.9831, -49.8569]
+        ];
+        for (var i = 0; i < locations.length; i++) {
+            marker = new L.marker([locations[i][1], locations[i][2]])
+                .bindPopup(locations[i][0])
+                .addTo(map);
+        }
     });
 
-    function verDados() {
+    function verDados(id) {
         $("#modalExemplo").modal({
             show: true
         });
+        $.ajax({
+            type: 'POST',
+            url: 'https://localhost:44386/reclamacoes/VerDados/',
+            data: { id: id },
+            success: function (response) {
+                $('#usuario').val(response.Object.NomeUsuario),
+                    $('#endereco').val(response.Object.Rua),
+                    $('#dataHora').val(response.Object.DataString),
+                    $('#area').val(response.Object.Area.Descricao),
+                    $('#descricao').val(response.Object.Descricao),
+                    $('#idReclamacao').val(response.Object.ID)
+            }
+        })
     }
+
+
+    function concluirReclamacao() {
+        const id = $('#idReclamacao').val();
+        $.ajax({
+            type: 'POST',
+            url: 'https://localhost:44386/reclamacoes/ConcluirReclamacao/',
+            data: { id: id },
+            success: function (response) {
+                if (response.Success == true) {
+                    ativar("Reclamação Concluída com Sucesso");
+                    $("#modalExemplo").modal('hide');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 4500);
+
+                }
+                else
+                    ativar("Não foi possível concluír essa reclamação");
+            }
+        })
+    }
+    function EnviarEmail() {
+        $.ajax({
+            type: 'POST',
+            url: 'https://localhost:44386/reclamacoes/EnviarEmails/',
+            success: function (response) {
+                if (response.Success == true) {
+                    ativar("Emails Enviados com Sucesso.");
+                }
+                else
+                    ativar("Não foi possível concluír essa reclamação");
+            }
+        })
+    }
+
+
+    const btn = document.getElementById('btn')
+    const divMessage = document.querySelector(".alert");
+
+    const msg = "teste de alerta !!!";
+
+    function ativar(msg) {
+        const message = document.createElement("div");
+        message.classList.add("message");
+        message.innerText = msg;
+        divMessage.appendChild(message);
+
+        setTimeout(() => {
+            message.style.display = "none";
+        }, 3000);
+    }
+
+
+
 
 
 </script>
